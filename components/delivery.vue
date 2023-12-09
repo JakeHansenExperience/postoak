@@ -11,12 +11,7 @@
                 Delivery Time: {{deliveryTime}}
                 </v-col>
             </v-row>
-            <v-row>
-            <v-col>
-                Driver: {{driver}}
-                </v-col>
-              
-            </v-row>
+           
     </v-container>
     </div>
     </template>
@@ -37,6 +32,7 @@
         address: String,
             deliveryTime: String,
             driver: String,
+            
         //the parameters the comopnet accepst
         // message: String,
         // product: Object,

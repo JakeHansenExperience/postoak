@@ -1,13 +1,46 @@
 <template>
     <div>
+        <!-- <v-container>
+            <v-row>
+      
+                <v-col>
+                    <showMap :points="points"></showMap>
+                </v-col>
+                
+            </v-row>
+        </v-container> -->
+        
         <v-container class='accent'>
             <v-btn @click="showOrder()"> Create Order </v-btn>
             <v-divider class="mt-6"></v-divider>
         <v-row v-for="order in orders"  > 
             <v-col class="pt-2">
                 <delivery :address="order.address" :deliveryTime="order.deliveryTime" :driver="order.driver" class="mt-4" ></delivery>
-                <v-btn @click="orderDelivered(order)"> Delivered</v-btn>
+                <showMap :points="points" :latitude="order.lat" :longitude="order.long"></showMap>
                 <!-- <v-btn @click="editDriver(order)"> Edit Driver </v-btn> -->
+                <v-btn-toggle
+        v-model="order.driver"
+        tile
+        color="deep-purple accent-3"
+        group
+      >
+        <v-btn value="jake">
+          Jake
+        </v-btn>
+
+        <v-btn value="jose">
+          Jose
+        </v-btn>
+
+        <v-btn value="marisol">
+          Marisol
+        </v-btn>
+
+        <v-btn value="juanita">
+          Juanita
+        </v-btn>
+      </v-btn-toggle>
+      <v-btn @click="orderDelivered(order)"> Delivered</v-btn>
                 <v-divider class="mt-6"></v-divider>
             </v-col>
         </v-row>
@@ -34,8 +67,16 @@
             <v-row>
                 <v-col>
                     <v-text-field
-            v-model="inputDriver"
-            label="Driver"
+            v-model="inputLat"
+            label="Lat"
+          ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col>
+                    <v-text-field
+            v-model="inputLong"
+            label="Long"
           ></v-text-field>
                 </v-col>
             </v-row>
@@ -77,6 +118,7 @@
             </v-row>
         </v-container>
     </v-overlay>
+    
     </div>
     </template>
     
@@ -89,22 +131,15 @@
             inputAddress: '',
             inputTime: '',
             inputDriver: '',
+            inputLat: '',
+            inputLong: '',
             editDriver: false,
             overlay: false,
+            points: [{"lat": 29.7612, "long": -95.4612 },],
             address: "this address",
             deliveryTime: "This time",
             driver: "This Driver",
             orders: {
-                '1': {
-                    address: "this address",
-                    deliveryTime: "This time",
-                    driver: "This Driver",
-                },
-                '2': {
-                    address: "this address 2",
-                    deliveryTime: "This time 2",
-                    driver: "This Driver 2",
-                },
             }
     
     }
@@ -153,10 +188,15 @@
             this.overlay = false
         },
         createOrder(){
+            this.overlay = false
             console.log(Object.keys(this.orders).length)
-            var obj = { address: this.inputAddress, deliveryTime: this.inputTime, driver: this.inputDriver}
+            var obj = { address: this.inputAddress, deliveryTime: this.inputTime, driver: "jake", lat: this.inputLat, long: this.inputLong}
             this.orders[String(Object.keys(this.orders).length + 1)] = obj
+            var coords = {"lat": Number(this.inputLat), "long": Number(this.inputLong)}
+            this.points.push(coords)
             console.log(this.orders)
+            console.log(this.points)
+            this.$forceUpdate();
         },
         orderDelivered(order){
             console.log("What Is order? ")
